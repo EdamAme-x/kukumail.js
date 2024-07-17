@@ -69,8 +69,14 @@ export class Kukumail {
 	}
 
 	async waitForInitlized() {
+		let count = 0;
+
 		while (!this.initlized || !this.csrfSubToken) {
 			await new Promise((resolve) => setTimeout(resolve, 1000));
+			count++;
+			if (count > 60) {
+				throw new Error("Waiting for initlized timed out");
+			}
 		}
 
 		return this;
