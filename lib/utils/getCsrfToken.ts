@@ -17,13 +17,13 @@ type CsrfTokenResult =
 			data: string;
 	  };
 
-export async function getCsrfToken(sessionHash: string, cookies?: string): Promise<CsrfTokenResult> {
+export async function getCsrfToken(sessionHash: string, csrfToken: string, cookies?: string): Promise<CsrfTokenResult> {
 	const response = await fetch(
-		buildPath("/ja.php"),
+		buildPath("/"),
 		createRequestOptions(
 			{},
 			{
-				cookies: createCookie(undefined, sessionHash) + (cookies ? cookies : ""),
+				cookies: createCookie(csrfToken, sessionHash) + (cookies ? cookies : ""),
 			},
 		),
 	);

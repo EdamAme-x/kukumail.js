@@ -6,6 +6,7 @@ type CreateAccountResult =
 			type: "success";
 			data: {
 				session_hash: string;
+                csrf_token: string;
 			};
 	  }
 	| {
@@ -31,9 +32,18 @@ export async function createAccount(): Promise<CreateAccountResult> {
 		};
 	}
 
-	const sessionHash = setCookie.split("; ").find((cookie) => cookie.startsWith("cookie_sessionhash="));
+    let cookies = "";
 
-	if (!sessionHash) {
+    if (Array.isArray(setCookie)) {
+        cookies = setCookie.join("; ");
+    }else {
+        cookies = setCookie;
+    }
+
+	const sessionHash = cookies.split("; ").find((cookie) => cookie.includes("cookie_sessionhash="));
+    const csrfToken = cookies.split("; ").find((cookie) => cookie.includes("cookie_csrf_token="));
+
+	if (!sessionHash || !csrfToken) {
 		return {
 			type: "error",
 			data: "Failed to extract session hash",
@@ -43,7 +53,8 @@ export async function createAccount(): Promise<CreateAccountResult> {
 	return {
 		type: "success",
 		data: {
-			session_hash: sessionHash.split("=")[1].trim(),
+			session_hash: sessionHash.split("cookie_sessionhash=")[1].trim(),
+            csrf_token: csrfToken.split("cookie_csrf_token=")[1].trim(),
 		},
 	};
 }
