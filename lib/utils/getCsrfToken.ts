@@ -2,7 +2,7 @@ import { buildPath } from "./buildPath";
 import { createCookie } from "./createCookie";
 import { createRequestOptions } from "./createRequestOptions";
 
-const CSRF_TOKEN_REGEX = /\&csrf_token_check=([a-z0-9])+\&csrf_subtoken_check=([a-z0-9])\"/;
+const CSRF_TOKEN_REGEX = /\&csrf_token_check=([a-z0-9])+\&csrf_subtoken_check=([a-z0-9])+/;
 
 type CsrfTokenResult =
 	| {
@@ -54,10 +54,12 @@ export async function getCsrfToken(sessionHash: string, csrfToken: string, cooki
 }
 
 function extractCsrfToken(html: string): [string, string] | null {
-	console.log(html);
 	const match = html.match(CSRF_TOKEN_REGEX);
 	if (!match) {
 		return null;
 	}
-	return [match[1], match[2]];
+    
+    const splitted = match[0].split("=")
+
+    return [splitted[1].split("&")[0], splitted[2]];
 }
