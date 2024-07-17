@@ -1,6 +1,6 @@
 {
   "name": "kukumail.js",
-  "module": "index.ts",
+  "module": "./exports/index.ts",
   "type": "module",
   "devDependencies": {
     "@types/bun": "latest"
