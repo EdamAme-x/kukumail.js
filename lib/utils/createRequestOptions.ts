@@ -1,5 +1,5 @@
 export function createRequestOptions(overrideOptions?: RequestInit, overrideHeaders?: HeadersInit): RequestInit {
-	return {
+	const options = {
 		headers: {
 			accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
 			"accept-language": "ja-JP,ja;q=0.9,ar-SS;q=0.8,ar;q=0.7,en-US;q=0.6,en;q=0.5,ko-KR;q=0.4,ko;q=0.3",
@@ -24,9 +24,10 @@ export function createRequestOptions(overrideOptions?: RequestInit, overrideHead
 			cookie: "cookie_failedSlot=; cookie_timezone=Asia%2FTokyo; cookie_gendomainorder=send4.uk; cookie_keepalive_insert=1; cookie_last_page_addrlist=0; ",
 			...overrideHeaders,
 		},
-		referrerPolicy: "strict-origin-when-cross-origin",
 		body: null,
 		method: "GET",
 		...overrideOptions,
 	};
+
+	return options;
 }

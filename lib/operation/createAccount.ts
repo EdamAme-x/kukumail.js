@@ -6,7 +6,7 @@ type CreateAccountResult =
 			type: "success";
 			data: {
 				session_hash: string;
-                csrf_token: string;
+				csrf_token: string;
 			};
 	  }
 	| {
@@ -32,16 +32,16 @@ export async function createAccount(): Promise<CreateAccountResult> {
 		};
 	}
 
-    let cookies = "";
+	let cookies = "";
 
-    if (Array.isArray(setCookie)) {
-        cookies = setCookie.join("; ");
-    }else {
-        cookies = setCookie;
-    }
+	if (Array.isArray(setCookie)) {
+		cookies = setCookie.join("; ");
+	} else {
+		cookies = setCookie;
+	}
 
 	const sessionHash = cookies.split("; ").find((cookie) => cookie.includes("cookie_sessionhash="));
-    const csrfToken = cookies.split("; ").find((cookie) => cookie.includes("cookie_csrf_token="));
+	const csrfToken = cookies.split("; ").find((cookie) => cookie.includes("cookie_csrf_token="));
 
 	if (!sessionHash || !csrfToken) {
 		return {
@@ -54,7 +54,7 @@ export async function createAccount(): Promise<CreateAccountResult> {
 		type: "success",
 		data: {
 			session_hash: sessionHash.split("cookie_sessionhash=")[1].trim(),
-            csrf_token: csrfToken.split("cookie_csrf_token=")[1].trim(),
+			csrf_token: csrfToken.split("cookie_csrf_token=")[1].trim(),
 		},
 	};
 }

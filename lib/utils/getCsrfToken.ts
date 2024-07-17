@@ -23,7 +23,7 @@ export async function getCsrfToken(sessionHash: string, csrfToken: string, cooki
 		createRequestOptions(
 			{},
 			{
-				cookies: createCookie(csrfToken, sessionHash) + (cookies ? cookies : ""),
+				cookie: createCookie(csrfToken, sessionHash) + (cookies ? cookies : ""),
 			},
 		),
 	);
@@ -54,6 +54,7 @@ export async function getCsrfToken(sessionHash: string, csrfToken: string, cooki
 }
 
 function extractCsrfToken(html: string): [string, string] | null {
+	console.log(html);
 	const match = html.match(CSRF_TOKEN_REGEX);
 	if (!match) {
 		return null;
