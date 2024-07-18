@@ -1,6 +1,7 @@
-import { buildPath } from "./buildPath";
-import { createCookie } from "./createCookie";
-import { createRequestOptions } from "./createRequestOptions";
+import { concatCookie } from "../utils/concatCookie";
+import { buildPath } from "../utils/buildPath";
+import { createCookie } from "../utils/createCookie";
+import { createRequestOptions } from "../utils/createRequestOptions";
 
 const CSRF_TOKEN_REGEX = /\&csrf_token_check=([a-z0-9])+\&csrf_subtoken_check=([a-z0-9])+/;
 
@@ -23,7 +24,7 @@ export async function getCsrfToken(sessionHash: string, csrfToken: string, cooki
 		createRequestOptions(
 			{},
 			{
-				cookie: createCookie(csrfToken, sessionHash) + (cookies ? cookies : ""),
+				cookie: concatCookie(createCookie(csrfToken, sessionHash), cookies),
 			},
 		),
 	);

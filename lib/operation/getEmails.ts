@@ -1,4 +1,5 @@
 import { buildPath } from "../utils/buildPath";
+import { concatCookie } from "../utils/concatCookie";
 import { createCookie } from "../utils/createCookie";
 import { createRequestOptions } from "../utils/createRequestOptions";
 
@@ -10,7 +11,7 @@ type getEmailsResult =
 					email: string;
 					username: string;
 					domain: string;
-                    email_with_alias: string;
+					email_with_alias: string;
 					password: string;
 					registration_date: string;
 				}[];
@@ -27,7 +28,7 @@ export async function getEmails(sessionHash: string, csrfToken: string, cookies?
 		createRequestOptions(
 			{},
 			{
-				cookie: createCookie(csrfToken, sessionHash) + (cookies ? cookies : ""),
+				cookie: concatCookie(createCookie(csrfToken, sessionHash), cookies),
 			},
 		),
 	);
@@ -52,13 +53,13 @@ export async function getEmails(sessionHash: string, csrfToken: string, cookies?
 				email: removeEscapeQuote(row[0]),
 				username: removeEscapeQuote(row[1]),
 				domain: removeEscapeQuote(row[2]),
-                email_with_alias: removeEscapeQuote(row[3]),
+				email_with_alias: removeEscapeQuote(row[3]),
 				password: removeEscapeQuote(row[4]),
 				registration_date: removeEscapeQuote(row[5]),
 			};
 		});
 
-    parsedCSV.shift();
+	parsedCSV.shift();
 
 	return {
 		type: "success",

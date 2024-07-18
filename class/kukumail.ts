@@ -1,6 +1,6 @@
 import { createAccount } from "../lib/operation/createAccount";
 import { getEmails } from "../lib/operation/getEmails";
-import { getCsrfToken } from "../lib/utils/getCsrfToken";
+import { getCsrfToken } from "../lib/operation/getCsrfToken";
 
 export class Kukumail {
 	initlized = false;
