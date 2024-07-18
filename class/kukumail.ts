@@ -1,3 +1,7 @@
+/**
+ * This module contains class to use Kukumail.
+ * @module
+ */
 import { createAccount } from "../lib/operation/createAccount";
 import { getEmails } from "../lib/operation/getEmails";
 import { getCsrfToken } from "../lib/operation/getCsrfToken";
