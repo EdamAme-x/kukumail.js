@@ -58,8 +58,8 @@ function extractCsrfToken(html: string): [string, string] | null {
 	if (!match) {
 		return null;
 	}
-    
-    const splitted = match[0].split("=")
 
-    return [splitted[1].split("&")[0], splitted[2]];
+	const splitted = match[0].split("=");
+
+	return [splitted[1].split("&")[0], splitted[2]];
 }

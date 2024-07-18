@@ -1,4 +1,5 @@
 import { createAccount } from "../lib/operation/createAccount";
+import { getEmails } from "../lib/operation/getEmails";
 import { getCsrfToken } from "../lib/utils/getCsrfToken";
 
 export class Kukumail {
@@ -8,21 +9,27 @@ export class Kukumail {
 	csrfSubToken?: string;
 	cfClearance?: string;
 
-	constructor(sessionHash?: string, csrfToken?: string, cfClearance?: string) {
-		if (sessionHash && csrfToken) {
+	constructor({
+		sessionHash,
+		csrfToken,
+		cfClearance,
+	}: {
+		sessionHash?: string;
+		csrfToken?: string;
+		cfClearance?: string;
+	}) {
+		if (sessionHash) {
 			this.initlized = true;
 			this.sessionHash = sessionHash;
-			this.csrfToken = csrfToken;
+			if (csrfToken) {
+				this.csrfToken = csrfToken;
+			}
 
 			if (cfClearance) {
 				this.cfClearance = cfClearance;
 			}
 			this.updateCsrfToken();
 		}
-
-		setInterval(async () => {
-			await this.updateCsrfToken();
-		}, 24 * 60 * 60 * 1000);
 	}
 
 	buildBaseCookie() {
@@ -54,7 +61,7 @@ export class Kukumail {
 
 		if (result.type === "error") {
 			throw new Error(result.data);
-		}else {
+		} else {
 			this.csrfToken = result.data.csrf_token;
 			this.csrfSubToken = result.data.csrf_subtoken;
 		}
@@ -68,17 +75,26 @@ export class Kukumail {
 		}
 	}
 
-	async waitForInitlized() {
+	async waitForInitlized(timeout: number = 60, checkInterval: number = 1000) {
+		if (this.initlized) {
+			return this;
+		}
+
 		let count = 0;
 
-		while (!this.initlized || !this.csrfSubToken) {
-			await new Promise((resolve) => setTimeout(resolve, 1000));
+		while (!this.initlized) {
+			await new Promise((resolve) => setTimeout(resolve, checkInterval));
 			count++;
-			if (count > 60) {
+			if (count > timeout) {
 				throw new Error("Waiting for initlized timed out");
 			}
 		}
 
 		return this;
+	}
+
+	async getEmails() {
+		this.guardNonInitlized();
+		return await getEmails(this.sessionHash as string, this.csrfToken as string, this.buildBaseCookie());
 	}
 }
