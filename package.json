@@ -18,5 +18,9 @@
 		"tabWidth": 4,
 		"singleQuote": false,
 		"trailingComma": "all"
+	},
+	"dependencies": {
+		"@types/jsdom": "^21.1.7",
+		"jsdom": "^24.1.0"
 	}
 }

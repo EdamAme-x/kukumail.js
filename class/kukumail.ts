@@ -1,6 +1,7 @@
 import { createAccount } from "../lib/operation/createAccount";
 import { getEmails } from "../lib/operation/getEmails";
 import { getCsrfToken } from "../lib/operation/getCsrfToken";
+import { getAvailableDomains } from "../lib/operation/getAvailableDomains";
 
 export class Kukumail {
 	initlized = false;
@@ -96,5 +97,10 @@ export class Kukumail {
 	async getEmails() {
 		this.guardNonInitlized();
 		return await getEmails(this.sessionHash as string, this.csrfToken as string, this.buildBaseCookie());
+	}
+
+	async getAvailableDomains() {
+		this.guardNonInitlized();
+		return await getAvailableDomains(this.sessionHash as string, this.csrfToken as string, this.buildBaseCookie());
 	}
 }
