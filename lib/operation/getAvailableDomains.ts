@@ -53,9 +53,9 @@ export async function getAvailableDomains(
 		.map((element) => {
 			const domain = element.querySelector("b")?.innerHTML.trim();
 			if (!domain) return null;
-            const splittedDomain = domain.split("");
-            if (splittedDomain[0] === "@") splittedDomain.shift();
-            if (splittedDomain.length < 4) return null; 
+			const splittedDomain = domain.split("");
+			if (splittedDomain[0] === "@") splittedDomain.shift();
+			if (splittedDomain.length < 4) return null;
 
 			const attributes: attributeTypes[] = [];
 			element.querySelectorAll("span").forEach((span) => {
