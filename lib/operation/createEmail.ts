@@ -2,9 +2,8 @@ import { buildPath } from "../utils/buildPath";
 import { concatCookie } from "../utils/concatCookie";
 import { createCookie } from "../utils/createCookie";
 import { createRequestOptions } from "../utils/createRequestOptions";
-import { getEmailMetadata } from "./getEmailMetadata";
 
-type deleteEmailResult =
+type createEmailResult =
 	| {
 			type: "success";
 			data: string;
@@ -14,38 +13,16 @@ type deleteEmailResult =
 			data: string;
 	  };
 
-export async function deleteEmail(
+export async function createEmail(
 	sessionHash: string,
 	csrfToken: string,
 	email: string,
 	cookies?: string,
-): Promise<deleteEmailResult> {
-	const emailMetadata = await getEmailMetadata(sessionHash, csrfToken, cookies);
-	let emailHash;
-
-	if (emailMetadata.type === "error") {
-		return {
-			type: "error",
-			data: emailMetadata.data,
-		};
-	}
-
-	for (const metadata of emailMetadata.data) {
-		if (metadata.email === email) {
-			emailHash = metadata.hash;
-			break;
-		}
-	}
-
-	if (!emailHash) {
-		return {
-			type: "error",
-			data: "Email not found",
-		};
-	}
-
+): Promise<createEmailResult> {
 	const response = await fetch(
-		buildPath(`/index._addrlist.php?action=delAddrList&nopost=1&num_list=${emailHash}%2C&_=${Date.now()}`),
+		buildPath(
+			`/index.php?action=addMailAddrByManual&nopost=1&by_system=1&t=${Date.now()}&csrf_token_check=${csrfToken}&newdomain=${email.split("@")[1]}&newuser=${email.split("@")[0]}&recaptcha_token=&_=${Date.now() - 1000}`,
+		),
 		createRequestOptions(
 			{},
 			{
@@ -63,7 +40,7 @@ export async function deleteEmail(
 
 	const text = await response.text();
 
-	if (!text.includes("OK")) {
+	if (!text.startsWith("OK:")) {
 		return {
 			type: "error",
 			data: text,
@@ -72,6 +49,6 @@ export async function deleteEmail(
 
 	return {
 		type: "success",
-		data: text,
+		data: text.slice(3),
 	};
 }

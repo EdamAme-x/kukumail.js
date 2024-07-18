@@ -2,50 +2,38 @@ import { buildPath } from "../utils/buildPath";
 import { concatCookie } from "../utils/concatCookie";
 import { createCookie } from "../utils/createCookie";
 import { createRequestOptions } from "../utils/createRequestOptions";
-import { getEmailMetadata } from "./getEmailMetadata";
+import { getServerSideIP } from "./getServerSideIP";
 
-type deleteEmailResult =
+type isAlreayExistResult =
 	| {
 			type: "success";
-			data: string;
+			data: boolean;
 	  }
 	| {
 			type: "error";
 			data: string;
 	  };
 
-export async function deleteEmail(
+export async function isAlreadyExist(
 	sessionHash: string,
 	csrfToken: string,
+	csrfSubToken: string,
 	email: string,
 	cookies?: string,
-): Promise<deleteEmailResult> {
-	const emailMetadata = await getEmailMetadata(sessionHash, csrfToken, cookies);
-	let emailHash;
+): Promise<isAlreayExistResult> {
+	const serverSideIP = await getServerSideIP(sessionHash, csrfToken, cookies);
 
-	if (emailMetadata.type === "error") {
+	if (serverSideIP.type === "error") {
 		return {
 			type: "error",
-			data: emailMetadata.data,
-		};
-	}
-
-	for (const metadata of emailMetadata.data) {
-		if (metadata.email === email) {
-			emailHash = metadata.hash;
-			break;
-		}
-	}
-
-	if (!emailHash) {
-		return {
-			type: "error",
-			data: "Email not found",
+			data: serverSideIP.data,
 		};
 	}
 
 	const response = await fetch(
-		buildPath(`/index._addrlist.php?action=delAddrList&nopost=1&num_list=${emailHash}%2C&_=${Date.now()}`),
+		buildPath(
+			`/index.php?action=checkNewMailUser&ip=${serverSideIP}&nopost=1&csrf_token_check=${csrfToken}&csrf_subtoken_check=${csrfSubToken}&newdomain=${email.split("@")[1]}&newuser=${email.split("@")[0]}&_=${Date.now()}`,
+		),
 		createRequestOptions(
 			{},
 			{
@@ -63,7 +51,7 @@ export async function deleteEmail(
 
 	const text = await response.text();
 
-	if (!text.includes("OK")) {
+	if (!text.startsWith("OK") && !text.startsWith("OFFER")) {
 		return {
 			type: "error",
 			data: text,
@@ -72,6 +60,6 @@ export async function deleteEmail(
 
 	return {
 		type: "success",
-		data: text,
+		data: text !== "OK",
 	};
 }

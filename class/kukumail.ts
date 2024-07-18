@@ -5,6 +5,9 @@ import { getAvailableDomains } from "../lib/operation/getAvailableDomains";
 import { createRandomEmail } from "../lib/operation/createRandomEmail";
 import { getEmailMetadata } from "../lib/operation/getEmailMetadata";
 import { deleteEmail } from "../lib/operation/deleteEmail";
+import { isAlreadyExist } from "../lib/operation/isAlreayExist";
+import { createEmail } from "../lib/operation/createEmail";
+import { createOnetimeEmail } from "../lib/operation/createOnetimeEmail";
 
 export class Kukumail {
 	initlized = false;
@@ -57,13 +60,15 @@ export class Kukumail {
 		this.initlized = true;
 		this.sessionHash = result.data.session_hash;
 		this.csrfToken = result.data.csrf_token;
-		await this.updateCsrfToken();
+		await this.updateCsrfToken(true);
 
 		return this;
 	}
 
-	async updateCsrfToken() {
-		this.guardNonInitlized();
+	async updateCsrfToken(bypass?: boolean) {
+		if (bypass) {
+			this.guardNonInitlized();
+		}
 		const result = await getCsrfToken(this.sessionHash as string, this.csrfToken as string, this.buildBaseCookie());
 
 		if (result.type === "error") {
@@ -76,9 +81,23 @@ export class Kukumail {
 		return this;
 	}
 
+	async initlize() {
+		if (this.initlized) {
+			return this;
+		}
+		await this.updateCsrfToken();
+		await this.waitForInitlized();
+
+		return this;
+	}
+
 	guardNonInitlized() {
 		if (!this.initlized) {
 			throw new Error("Kukumail is not initialized, call createAccount() first");
+		} else {
+			if (!this.csrfToken || !this.csrfSubToken) {
+				throw new Error("Kukumail is not initialized, call updateCsrfToken() first");
+			}
 		}
 	}
 
@@ -125,8 +144,34 @@ export class Kukumail {
 		);
 	}
 
+	async createOnetimeEmail() {
+		this.guardNonInitlized();
+		return await createOnetimeEmail(
+			this.sessionHash as string,
+			this.csrfToken as string,
+			this.csrfSubToken as string,
+			this.buildBaseCookie(),
+		);
+	}
+
+	async createEmail(email: string) {
+		this.guardNonInitlized();
+		return await createEmail(this.sessionHash as string, this.csrfToken as string, email, this.buildBaseCookie());
+	}
+
 	async deleteEmail(email: string) {
 		this.guardNonInitlized();
 		return await deleteEmail(this.sessionHash as string, this.csrfToken as string, email, this.buildBaseCookie());
+	}
+
+	async isAlreadyExist(email: string) {
+		this.guardNonInitlized();
+		return await isAlreadyExist(
+			this.sessionHash as string,
+			this.csrfToken as string,
+			this.csrfSubToken as string,
+			email,
+			this.buildBaseCookie(),
+		);
 	}
 }

@@ -2,9 +2,10 @@ import { buildPath } from "../utils/buildPath";
 import { concatCookie } from "../utils/concatCookie";
 import { createCookie } from "../utils/createCookie";
 import { createRequestOptions } from "../utils/createRequestOptions";
-import { getEmailMetadata } from "./getEmailMetadata";
 
-type deleteEmailResult =
+const IP_REGEX = /&ip=(.+)&nopost=/;
+
+type getServerSideIPResult =
 	| {
 			type: "success";
 			data: string;
@@ -14,38 +15,13 @@ type deleteEmailResult =
 			data: string;
 	  };
 
-export async function deleteEmail(
+export async function getServerSideIP(
 	sessionHash: string,
 	csrfToken: string,
-	email: string,
 	cookies?: string,
-): Promise<deleteEmailResult> {
-	const emailMetadata = await getEmailMetadata(sessionHash, csrfToken, cookies);
-	let emailHash;
-
-	if (emailMetadata.type === "error") {
-		return {
-			type: "error",
-			data: emailMetadata.data,
-		};
-	}
-
-	for (const metadata of emailMetadata.data) {
-		if (metadata.email === email) {
-			emailHash = metadata.hash;
-			break;
-		}
-	}
-
-	if (!emailHash) {
-		return {
-			type: "error",
-			data: "Email not found",
-		};
-	}
-
+): Promise<getServerSideIPResult> {
 	const response = await fetch(
-		buildPath(`/index._addrlist.php?action=delAddrList&nopost=1&num_list=${emailHash}%2C&_=${Date.now()}`),
+		buildPath("/"),
 		createRequestOptions(
 			{},
 			{
@@ -63,15 +39,17 @@ export async function deleteEmail(
 
 	const text = await response.text();
 
-	if (!text.includes("OK")) {
+	const match = text.match(IP_REGEX);
+
+	if (!match) {
 		return {
 			type: "error",
-			data: text,
+			data: "Failed to extract IP",
 		};
 	}
 
 	return {
 		type: "success",
-		data: text,
+		data: match[1],
 	};
 }

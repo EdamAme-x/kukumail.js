@@ -2,50 +2,30 @@ import { buildPath } from "../utils/buildPath";
 import { concatCookie } from "../utils/concatCookie";
 import { createCookie } from "../utils/createCookie";
 import { createRequestOptions } from "../utils/createRequestOptions";
-import { getEmailMetadata } from "./getEmailMetadata";
 
-type deleteEmailResult =
+type createOnetimeEmailResult =
 	| {
 			type: "success";
-			data: string;
+			data: {
+				email: string;
+				limitDate: string;
+			};
 	  }
 	| {
 			type: "error";
 			data: string;
 	  };
 
-export async function deleteEmail(
+export async function createOnetimeEmail(
 	sessionHash: string,
 	csrfToken: string,
-	email: string,
+	csrfSubToken: string,
 	cookies?: string,
-): Promise<deleteEmailResult> {
-	const emailMetadata = await getEmailMetadata(sessionHash, csrfToken, cookies);
-	let emailHash;
-
-	if (emailMetadata.type === "error") {
-		return {
-			type: "error",
-			data: emailMetadata.data,
-		};
-	}
-
-	for (const metadata of emailMetadata.data) {
-		if (metadata.email === email) {
-			emailHash = metadata.hash;
-			break;
-		}
-	}
-
-	if (!emailHash) {
-		return {
-			type: "error",
-			data: "Email not found",
-		};
-	}
-
+): Promise<createOnetimeEmailResult> {
 	const response = await fetch(
-		buildPath(`/index._addrlist.php?action=delAddrList&nopost=1&num_list=${emailHash}%2C&_=${Date.now()}`),
+		buildPath(
+			`/index.php?action=addMailAddrByOnetime&nopost=1&by_system=1&csrf_token_check=${csrfToken}&csrf_subtoken_check=${csrfSubToken}&recaptcha_token=&_=${Date.now()}`,
+		),
 		createRequestOptions(
 			{},
 			{
@@ -63,7 +43,7 @@ export async function deleteEmail(
 
 	const text = await response.text();
 
-	if (!text.includes("OK")) {
+	if (!text.startsWith("OK:")) {
 		return {
 			type: "error",
 			data: text,
@@ -72,6 +52,9 @@ export async function deleteEmail(
 
 	return {
 		type: "success",
-		data: text,
+		data: {
+			email: text.slice(3).split(",")[0],
+			limitDate: text.slice(3).split(",")[2],
+		},
 	};
 }
