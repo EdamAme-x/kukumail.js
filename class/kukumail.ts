@@ -11,6 +11,8 @@ import { createOnetimeEmail } from "../lib/operation/createOnetimeEmail";
 import { sendMail } from "../lib/operation/sendMail";
 import { getSendedMails } from "../lib/operation/getSendedMails";
 import { getReceivedMails } from "../lib/operation/getReceivedMails";
+import { createShareLink } from "../lib/operation/createShareLink";
+import { getMailContent } from "../lib/operation/getMailContent";
 
 export class Kukumail {
 	initlized = false;
@@ -205,5 +207,29 @@ export class Kukumail {
 	async getReceivedMails() {
 		this.guardNonInitlized();
 		return await getReceivedMails(this.sessionHash as string, this.csrfToken as string, this.csrfSubToken as string, this.buildBaseCookie());
+	}
+
+	async createShareLink(type: "recv" | "send", id: string) {
+		this.guardNonInitlized();
+		return await createShareLink(
+			this.sessionHash as string,
+			this.csrfToken as string,
+			this.csrfSubToken as string,
+			type,
+			id,
+			this.buildBaseCookie(),
+		);
+	}
+
+	async getMailContent(type: "recv" | "send", id: string) {
+		this.guardNonInitlized();
+		return await getMailContent(
+			this.sessionHash as string,
+			this.csrfToken as string,
+			this.csrfSubToken as string,
+			type,
+			id,
+			this.buildBaseCookie(),
+		);
 	}
 }
