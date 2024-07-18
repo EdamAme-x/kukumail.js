@@ -4,6 +4,7 @@ import { getCsrfToken } from "../lib/operation/getCsrfToken";
 import { getAvailableDomains } from "../lib/operation/getAvailableDomains";
 import { createRandomEmail } from "../lib/operation/createRandomEmail";
 import { getEmailMetadata } from "../lib/operation/getEmailMetadata";
+import { deleteEmail } from "../lib/operation/deleteEmail";
 
 export class Kukumail {
 	initlized = false;
@@ -37,7 +38,7 @@ export class Kukumail {
 
 	buildBaseCookie() {
 		if (!this.cfClearance) {
-			return "";
+			return;
 		}
 		return `cf_clearance=${this.cfClearance}; `;
 	}
@@ -122,5 +123,10 @@ export class Kukumail {
 			this.csrfSubToken as string,
 			this.buildBaseCookie(),
 		);
+	}
+
+	async deleteEmail(email: string) {
+		this.guardNonInitlized();
+		return await deleteEmail(this.sessionHash as string, this.csrfToken as string, email, this.buildBaseCookie());
 	}
 }
