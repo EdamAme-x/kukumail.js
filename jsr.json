@@ -1,6 +1,6 @@
 {
 	"$schema": "https://jsr.io/schema/config-file.v1.json",
-	"name": "@edamame-x/kukumail.js",
+	"name": "@edamame-x/kukumailjs",
 	"version": "0.0.0",
 	"exports": {
 		".": "./exports/index.ts"
