@@ -8,6 +8,9 @@ import { deleteEmail } from "../lib/operation/deleteEmail";
 import { isAlreadyExist } from "../lib/operation/isAlreayExist";
 import { createEmail } from "../lib/operation/createEmail";
 import { createOnetimeEmail } from "../lib/operation/createOnetimeEmail";
+import { sendMail } from "../lib/operation/sendMail";
+import { getSendedMails } from "../lib/operation/getSendedMails";
+import { getReceivedMails } from "../lib/operation/getReceivedMails";
 
 export class Kukumail {
 	initlized = false;
@@ -26,7 +29,6 @@ export class Kukumail {
 		cfClearance?: string;
 	}) {
 		if (sessionHash) {
-			this.initlized = true;
 			this.sessionHash = sessionHash;
 			if (csrfToken) {
 				this.csrfToken = csrfToken;
@@ -35,7 +37,10 @@ export class Kukumail {
 			if (cfClearance) {
 				this.cfClearance = cfClearance;
 			}
-			this.updateCsrfToken();
+
+			if (this.sessionHash && this.csrfToken) {
+				this.initlized = true;
+			}
 		}
 	}
 
@@ -76,6 +81,10 @@ export class Kukumail {
 		} else {
 			this.csrfToken = result.data.csrf_token;
 			this.csrfSubToken = result.data.csrf_subtoken;
+
+			if (this.sessionHash && this.csrfToken && this.csrfSubToken) {
+				this.initlized = true;
+			}
 		}
 
 		return this;
@@ -173,5 +182,28 @@ export class Kukumail {
 			email,
 			this.buildBaseCookie(),
 		);
+	}
+
+	async sendMail(email: string, targetEmail: string, subject: string, message: string) {
+		this.guardNonInitlized();
+		return await sendMail(
+			this.sessionHash as string,
+			this.csrfToken as string,
+			email,
+			targetEmail,
+			subject,
+			message,
+			this.buildBaseCookie(),
+		);
+	}
+
+	async getSendedMails() {
+		this.guardNonInitlized();
+		return await getSendedMails(this.sessionHash as string, this.csrfToken as string, this.buildBaseCookie());
+	}
+
+	async getReceivedMails() {
+		this.guardNonInitlized();
+		return await getReceivedMails(this.sessionHash as string, this.csrfToken as string, this.csrfSubToken as string, this.buildBaseCookie());
 	}
 }
