@@ -64,3 +64,4 @@ console.log(kukumail.sessionHash);
 ![cookies](./assets/cookies.png)
 
 And more: [https://jsr.io/@edamame-x/kukumailjs/doc](https://jsr.io/@edamame-x/kukumailjs/doc)
+Question: [https://discord.gg/MrtfbAcP3K](https://discord.gg/MrtfbAcP3K)
