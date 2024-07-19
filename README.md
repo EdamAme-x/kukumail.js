@@ -36,6 +36,7 @@ if (result.type === "error") {
 }else{
     console.log(result.data);
 
+    // you should receive mail
     const result2 = await kukumail.getReceivedMails();
     if (result2.type === "error") {
         console.error(result2.data);
