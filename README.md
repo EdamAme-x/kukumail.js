@@ -31,16 +31,19 @@ import { Kukumail } from "@edamame-x/kukumailjs";
 const kukumail = new Kukumail({ sessionHash: "SHASH%3A..." });
 await kukumail.initlize();
 const result = await kukumail.createRandomEmail();
+
 if (result.type === "error") {
     console.error(result.data);
 }else{
     console.log(result.data);
 
     const result2 = await kukumail.getReceivedMails();
+
     if (result2.type === "error") {
         console.error(result2.data);
     }else {
         console.log(result2.data);
+
         if (result2.data.length === 0) {
             console.log("No Received Mails")
         }else {
