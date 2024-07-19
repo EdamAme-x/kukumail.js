@@ -25,7 +25,7 @@ deno add @edamame-x/kukumailjs
 ```
 
 ```ts
-import { Kukumail } from "../class/kukumail";
+import { Kukumail } from "@edamame-x/kukumailjs";
 
 // Get from cookies
 const kukumail = new Kukumail({ sessionHash: "SHASH%3A..." });
