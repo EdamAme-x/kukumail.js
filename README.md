@@ -36,19 +36,22 @@ if (result.type === "error") {
 }else{
     console.log(result.data);
 
-    // you should receive mail
     const result2 = await kukumail.getReceivedMails();
     if (result2.type === "error") {
         console.error(result2.data);
     }else {
         console.log(result2.data);
-
-        const result3 = await kukumail.getMailContent("recv", result2.data[0].id);
-
-        if (result3.type === "error") {
-            console.error(result3.data);
+        if (result2.data.length === 0) {
+            console.log("No Received Mails")
         }else {
-            console.log(result3.data);
+            const result3 = await kukumail.getMailContent("recv", result2.data[0].id);
+
+            if (result3.type === "error") {
+                console.error(result3.data);
+            }else {
+                console.log(result3.data);
+            }
+
         }
     }
 }
