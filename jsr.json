@@ -3,6 +3,7 @@
 	"name": "@edamame-x/kukumailjs",
 	"version": "1.0.0",
 	"exports": {
-		".": "./exports/index.ts"
+		".": "./exports/index.ts",
+		"class": "./class/kukumail.ts"
 	}
 }
