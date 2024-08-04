@@ -1,1 +1,1 @@
-export * from "../class/kukumail.ts"
+export * from "../class/kukumail";
