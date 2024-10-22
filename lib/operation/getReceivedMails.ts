@@ -54,7 +54,6 @@ export async function getReceivedMails(
         const subject = element.querySelector("a b > span")?.innerHTML.trim()
         if (!subject) return null;
         const container = cleanString(element.querySelector("a div[style] > div[class]")?.innerHTML.trim())
-        console.log(container)
         if (!container) return null;
         const splittedContainer = container.split(" | ");
         const date = splittedContainer[0];
