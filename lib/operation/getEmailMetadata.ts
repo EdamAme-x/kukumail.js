@@ -49,7 +49,8 @@ export async function getEmailMetadata(
   const dom = doc.window.document;
 
   const data = Array.from(dom.querySelectorAll("div .vcenter"))
-    .map((element) => {
+    // deno-lint-ignore no-explicit-any
+    .map((element: any) => {
       const email = element.querySelector("a > div > span:nth-child(2)")
         ?.innerHTML.trim();
       if (!email) return null;
@@ -61,8 +62,8 @@ export async function getEmailMetadata(
       let limit: string | number | undefined = element.querySelector("a")
         ?.innerHTML.trim();
 
-      if (limit?.includes("残り ")) {
-        limit = limit.split("残り ")[1].split(" 日")[0].trim();
+      if (String(limit)?.includes("残り ")) {
+        limit = String(limit).split("残り ")[1].split(" 日")[0].trim();
         if (!limit) return null;
         limit = Number(limit);
       } else {

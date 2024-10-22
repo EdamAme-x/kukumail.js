@@ -51,7 +51,8 @@ export async function getReceivedMails(
   const doc = new JSDOM(html).window.document;
 
   const data = Array.from(doc.querySelectorAll("div > [style].horizontal")).map(
-    (element) => {
+    // deno-lint-ignore no-explicit-any
+    (element: any) => {
       const subject = element.querySelector("a b > span")?.innerHTML.trim();
       if (!subject) return null;
       const container = cleanString(

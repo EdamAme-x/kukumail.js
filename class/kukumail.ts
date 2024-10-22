@@ -5,18 +5,51 @@
 import { createAccount } from "../lib/operation/createAccount.ts";
 import { getEmails, type getEmailsResult } from "../lib/operation/getEmails.ts";
 import { getCsrfToken } from "../lib/operation/getCsrfToken.ts";
-import { getAvailableDomains, type getAvailableDomainsResult } from "../lib/operation/getAvailableDomains.ts";
-import { createRandomEmail, type createRandomEmailResult } from "../lib/operation/createRandomEmail.ts";
-import { getEmailMetadata, type getEmailMetadataResult } from "../lib/operation/getEmailMetadata.ts";
-import { deleteEmail, type deleteEmailResult } from "../lib/operation/deleteEmail.ts";
-import { isAlreadyExist, type isAlreayExistResult } from "../lib/operation/isAlreayExist.ts";
-import { createEmail, type createEmailResult } from "../lib/operation/createEmail.ts";
-import { createOnetimeEmail, type createOnetimeEmailResult } from "../lib/operation/createOnetimeEmail.ts";
-import { sendMail, type sendEmailResult } from "../lib/operation/sendMail.ts";
-import { getSendedMails, type getSendedMailsResult } from "../lib/operation/getSendedMails.ts";
-import { getReceivedMails, type getReceivedMailsResult } from "../lib/operation/getReceivedMails.ts";
-import { createShareLink, type createShareLinkResult } from "../lib/operation/createShareLink.ts";
-import { getMailContent, type getMailContentResult } from "../lib/operation/getMailContent.ts";
+import {
+  getAvailableDomains,
+  type getAvailableDomainsResult,
+} from "../lib/operation/getAvailableDomains.ts";
+import {
+  createRandomEmail,
+  type createRandomEmailResult,
+} from "../lib/operation/createRandomEmail.ts";
+import {
+  getEmailMetadata,
+  type getEmailMetadataResult,
+} from "../lib/operation/getEmailMetadata.ts";
+import {
+  deleteEmail,
+  type deleteEmailResult,
+} from "../lib/operation/deleteEmail.ts";
+import {
+  isAlreadyExist,
+  type isAlreayExistResult,
+} from "../lib/operation/isAlreayExist.ts";
+import {
+  createEmail,
+  type createEmailResult,
+} from "../lib/operation/createEmail.ts";
+import {
+  createOnetimeEmail,
+  type createOnetimeEmailResult,
+} from "../lib/operation/createOnetimeEmail.ts";
+import { type sendEmailResult, sendMail } from "../lib/operation/sendMail.ts";
+import {
+  getSendedMails,
+  type getSendedMailsResult,
+} from "../lib/operation/getSendedMails.ts";
+import {
+  getReceivedMails,
+  type getReceivedMailsResult,
+} from "../lib/operation/getReceivedMails.ts";
+import {
+  createShareLink,
+  type createShareLinkResult,
+} from "../lib/operation/createShareLink.ts";
+import {
+  getMailContent,
+  type getMailContentResult,
+} from "../lib/operation/getMailContent.ts";
 
 export class Kukumail {
   initlized = false;
@@ -124,7 +157,10 @@ export class Kukumail {
     }
   }
 
-  async waitForInitlized(timeout: number = 60, checkInterval: number = 1000): Promise<void | this> {
+  async waitForInitlized(
+    timeout: number = 60,
+    checkInterval: number = 1000,
+  ): Promise<void | this> {
     if (this.initlized) {
       return this;
     }
@@ -247,7 +283,7 @@ export class Kukumail {
     );
   }
 
-  async getReceivedMails(): Promise<getReceivedMailsResult>{
+  async getReceivedMails(): Promise<getReceivedMailsResult> {
     this.guardNonInitlized();
     return await getReceivedMails(
       this.sessionHash as string,
@@ -257,7 +293,10 @@ export class Kukumail {
     );
   }
 
-  async createShareLink(type: "recv" | "send", id: string): Promise<createShareLinkResult> {
+  async createShareLink(
+    type: "recv" | "send",
+    id: string,
+  ): Promise<createShareLinkResult> {
     this.guardNonInitlized();
     return await createShareLink(
       this.sessionHash as string,
@@ -269,7 +308,10 @@ export class Kukumail {
     );
   }
 
-  async getMailContent(type: "recv" | "send", id: string): Promise<getMailContentResult> {
+  async getMailContent(
+    type: "recv" | "send",
+    id: string,
+  ): Promise<getMailContentResult> {
     this.guardNonInitlized();
     return await getMailContent(
       this.sessionHash as string,

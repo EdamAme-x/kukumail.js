@@ -51,7 +51,8 @@ export async function getSendedMails(
 
   const data = Array.from(
     doc.querySelectorAll("div > [id^='area_mail_'].horizontal"),
-  ).map((element) => {
+    // deno-lint-ignore no-explicit-any
+  ).map((element: any) => {
     const subject = element.querySelector("a b > span")?.innerHTML.trim();
     if (!subject) return null;
     const container = cleanString(

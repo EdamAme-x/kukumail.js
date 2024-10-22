@@ -8,7 +8,8 @@
   },
   "compilerOptions": {
     "lib": [
-      "ESNext"
+      "ESNext",
+      "deno.window"
     ],
     "target": "ESNext",
     "module": "ESNext",
