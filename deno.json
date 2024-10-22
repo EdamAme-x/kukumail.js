@@ -1,25 +1,24 @@
 {
+  "$schema": "https://jsr.io/schema/config-file.v1.json",
+  "name": "@edamame-x/kukumailjs",
+  "version": "1.1.6",
+  "exports": {
+    ".": "./exports/index.ts",
+    "./class": "./class/kukumail.ts"
+  },
   "compilerOptions": {
-    // Enable latest features
-    "lib": ["ESNext"],
+    "lib": [
+      "ESNext"
+    ],
     "target": "ESNext",
     "module": "ESNext",
     "moduleDetection": "force",
     "jsx": "react-jsx",
     "allowJs": true,
-
-    // Bundler mode
-    "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
-    "noEmit": true,
-
-    // Best practices
     "strict": true,
-    "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
-
-    // Some stricter flags (disabled by default)
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false

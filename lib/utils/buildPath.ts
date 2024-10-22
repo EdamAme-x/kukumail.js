@@ -1,5 +1,5 @@
-import { BASE_URL } from "../../consts";
+import { BASE_URL } from "../../consts/index.ts";
 
 export function buildPath(path: string): string {
-	return BASE_URL + path;
+  return BASE_URL + path;
 }

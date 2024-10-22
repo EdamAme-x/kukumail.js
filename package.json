@@ -1,26 +1,26 @@
 {
-	"name": "kukumail.js",
-	"module": "./exports/index.ts",
-	"type": "module",
-	"scripts": {
-		"format": "prettier --write ."
-	},
-	"devDependencies": {
-		"@types/bun": "latest",
-		"prettier": "^3.3.3"
-	},
-	"peerDependencies": {
-		"typescript": "^5.0.0"
-	},
-	"prettier": {
-		"printWidth": 120,
-		"useTabs": true,
-		"tabWidth": 4,
-		"singleQuote": false,
-		"trailingComma": "all"
-	},
-	"dependencies": {
-		"@types/jsdom": "^21.1.7",
-		"jsdom": "^24.1.0"
-	}
+  "name": "kukumail.js",
+  "module": "./exports/index.ts",
+  "type": "module",
+  "scripts": {
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "prettier": "^3.3.3"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "prettier": {
+    "printWidth": 120,
+    "useTabs": true,
+    "tabWidth": 4,
+    "singleQuote": false,
+    "trailingComma": "all"
+  },
+  "dependencies": {
+    "@types/jsdom": "^21.1.7",
+    "jsdom": "^25.0.1"
+  }
 }

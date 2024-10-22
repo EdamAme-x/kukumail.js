@@ -3,7 +3,7 @@ name: release
 on:
   push:
     tags:
-      - '*'
+      - "*"
 
 jobs:
   jsr:
@@ -20,7 +20,7 @@ jobs:
       - name: Install deno
         uses: denoland/setup-deno@v1
         with:
-          deno-version: v1.x
+          deno-version: v2.x
 
       - name: Publish to JSR
-        run: deno run -A jsr:@david/publish-on-tag@0.1.4 --unstable-sloppy-imports
+        run: deno run -A jsr:@david/publish-on-tag@0.1.4
