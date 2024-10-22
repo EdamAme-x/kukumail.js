@@ -22,5 +22,8 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false
+  },
+  "imports": {
+    "jsdom": "npm:jsdom@^25.0.1"
   }
 }
