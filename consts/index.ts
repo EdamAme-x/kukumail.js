@@ -1,4 +1,4 @@
-export const BASE_URL = "https://m.kuku.lu";
+export const BASE_URL = "https://160.251.98.83:443";
 
 export const PATH_MAP = {
   home: "/",
