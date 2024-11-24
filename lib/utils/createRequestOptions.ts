@@ -5,6 +5,9 @@ export function createRequestOptions(
   const options = {
     headers: {
       host: "m.kuku.lu",
+      "X-Forwarded-For": "1.1.1.1",
+      "Cf-Connecting-Ip": "1.1.1.1", 
+      "X-Real-IP": "1.1.1.1",
       accept:
         "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
       "accept-language":
