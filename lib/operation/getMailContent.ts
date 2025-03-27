@@ -41,12 +41,13 @@ export async function getMailContent(
 
   const response = await fetch(
     shareLink.data,
-    createRequestOptions(
-      {},
-      {
-        cookie: concatCookie(createCookie(csrfToken, sessionHash), cookies),
-      },
-    ),
+    /* issue: https://github.com/EdamAme-x/kukumail.js/issues/1 */
+    // createRequestOptions(
+    //   {},
+    //   {
+    //     cookie: concatCookie(createCookie(csrfToken, sessionHash), cookies),
+    //   },
+    // ),
   );
 
   if (response.status !== 200) {
